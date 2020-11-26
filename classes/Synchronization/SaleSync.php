@@ -33,8 +33,8 @@ class SaleSync extends AbstractDataSync
         add_filter('woocommerce_custobar_sale_properties', [__CLASS__, 'addSubscriptionFields'], 10, 3);
 
         // WooCommerce Subscriptions
-        add_action('woocommerce_subscription_renewal_payment_complete', [__CLASS__, 'updateOnSubscriptionRenewal'], 10, 2);
-        add_action('woocommerce_subscription_status_updated', [__CLASS__, 'updateOnSubscriptionStatusChange'], 10, 3);
+        //add_action('woocommerce_subscription_renewal_payment_complete', [__CLASS__, 'updateOnSubscriptionRenewal'], 10, 2);
+        //add_action('woocommerce_subscription_status_updated', [__CLASS__, 'updateOnSubscriptionStatusChange'], 10, 3);
     }
 
     public static function updateOnSubscriptionRenewal($args)
@@ -51,7 +51,11 @@ class SaleSync extends AbstractDataSync
 
     public static function singleUpdate($args)
     {
-        $order = wc_get_order($args[0]);
+        if (is_array($args)) {
+          $order = wc_get_order($args[0]);
+        } else {
+          $order = wc_get_order($args);
+        }
 
         // Would sometimes be triggered twice without the class check, because
         // Subscriptions plugin also creates additional order instance.
