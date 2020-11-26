@@ -1,0 +1,11 @@
+{
+  "name": "chadetz/woocommerce-custobar",
+  "description": "Syncs your WooCommerce data with Custobar.",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "CHadetz"
+    }
+  ],
+  "type": "wordpress-plugin"
+}
