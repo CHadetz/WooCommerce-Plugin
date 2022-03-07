@@ -14,7 +14,7 @@ use WooCommerceCustobar\DataType\Custobar_Customer;
 class Customer_Sync extends Data_Sync {
 
 
-	protected static $endpoint  = '/customers/upload/';
+	protected static $endpoint  = '/customers/';
 	protected static $child     = __CLASS__;
 	protected static $data_type = 'customer';
 
@@ -26,8 +26,8 @@ class Customer_Sync extends Data_Sync {
 		add_action( 'woocommerce_update_customer', array( __CLASS__, 'schedule_single_update' ), 10, 1 );
 
 		// Hook into scheduled actions
-		// Call parent method to consider request limit
-		add_action( 'woocommerce_custobar_customer_sync', array( __CLASS__, 'throttle_single_update' ), 10, 1 );
+		// Call parent method
+		add_action( 'woocommerce_custobar_customer_sync', array( __CLASS__, 'do_single_update' ), 10, 1 );
 
 		// Hook export related actions
 		add_action( 'woocommerce_custobar_customer_export', array( __CLASS__, 'export_batch' ), 10, 1 );
@@ -105,12 +105,11 @@ class Customer_Sync extends Data_Sync {
 				'#' . $user_id . ' NEW/UPDATE CUSTOMER, SYNC SCHEDULED (FORCE)',
 				array( 'source' => 'custobar' )
 			);
-		}
-
-		// We need only one action scheduled
-		if ( ! as_next_scheduled_action( $hook, $args, $group ) ) {
+		} else {
+			// We need only one action scheduled
+			as_unschedule_action( $hook, $args, $group );
 			as_schedule_single_action( time(), $hook, $args, $group );
-
+	
 			wc_get_logger()->info(
 				'#' . $user_id . ' NEW/UPDATE CUSTOMER, SYNC SCHEDULED',
 				array( 'source' => 'custobar' )

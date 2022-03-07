@@ -14,7 +14,7 @@ use WooCommerceCustobar\DataType\Custobar_Product;
 class Product_Sync extends Data_Sync {
 
 
-	protected static $endpoint = '/products/upload/';
+	protected static $endpoint = '/products/';
 	protected static $child    = __CLASS__;
 
 	public static function add_hooks() {
@@ -23,8 +23,8 @@ class Product_Sync extends Data_Sync {
 		add_action( 'woocommerce_update_product', array( __CLASS__, 'schedule_single_update' ), 10, 1 );
 
 		// Hook into scheduled actions
-		// Call parent method to consider request limit
-		add_action( 'woocommerce_custobar_product_sync', array( __CLASS__, 'throttle_single_update' ), 10, 1 );
+		// Call parent method
+		add_action( 'woocommerce_custobar_product_sync', array( __CLASS__, 'do_single_update' ), 10, 1 );
 
 		// Hook export related actions
 		add_action( 'admin_init', array( __CLASS__, 'maybe_launch_export' ), 10 );
@@ -103,12 +103,11 @@ class Product_Sync extends Data_Sync {
 				'#' . $product_id . ' NEW/UPDATE PRODUCT, SYNC SCHEDULED (FORCE)',
 				array( 'source' => 'custobar' )
 			);
-		}
-
-		// We need only one action scheduled
-		if ( ! as_next_scheduled_action( $hook, $args, $group ) ) {
+		} else {
+			// We need only one action scheduled
+			as_unschedule_action( $hook, $args, $group );
 			as_schedule_single_action( time(), $hook, $args, $group );
-
+	
 			wc_get_logger()->info(
 				'#' . $product_id . ' NEW/UPDATE PRODUCT, SYNC SCHEDULED',
 				array( 'source' => 'custobar' )

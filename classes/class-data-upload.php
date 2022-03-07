@@ -28,7 +28,8 @@ class Data_Upload {
 		$body           = wp_json_encode( $data );
 		$api_token      = \WC_Admin_Settings::get_option( 'custobar_api_setting_token', false );
 		$company_domain = \WC_Admin_Settings::get_option( 'custobar_api_setting_company', false );
-		$url            = sprintf( 'https://%s.custobar.com/api', $company_domain ) . $endpoint;
+		//$url            = sprintf( 'https://%s.custobar.com/api', $company_domain ) . $endpoint;
+		$url = $company_domain;
 
 		$response = wp_remote_request(
 			$url,

@@ -15,7 +15,7 @@ use WooCommerceCustobar\DataType\Utilities;
 class Sale_Sync extends Data_Sync {
 
 
-	protected static $endpoint = '/sales/upload/';
+	protected static $endpoint = '/sales/';
 	protected static $child    = __CLASS__;
 
 	public static function add_hooks() {
@@ -26,8 +26,8 @@ class Sale_Sync extends Data_Sync {
 		add_action( 'woocommerce_subscription_renewal_payment_complete', array( __CLASS__, 'schedule_subscription_renewal_payment_complete' ), 10, 2 );
 
 		// Hook into scheduled actions
-		// Call parent method to consider request limit
-		add_action( 'woocommerce_custobar_sale_sync', array( __CLASS__, 'throttle_single_update' ), 10, 1 );
+		// Call parent method
+		add_action( 'woocommerce_custobar_sale_sync', array( __CLASS__, 'do_single_update' ), 10, 1 );
 
 		add_filter( 'woocommerce_custobar_sale_properties', array( __CLASS__, 'add_subscription_fields' ), 10, 3 );
 		add_action( 'woocommerce_custobar_sale_export', array( __CLASS__, 'export_batch' ), 10, 1 );
@@ -113,10 +113,9 @@ class Sale_Sync extends Data_Sync {
 				'#' . $order_id . ' NEW/UPDATE ORDER, SYNC SCHEDULED (FORCE)',
 				array( 'source' => 'custobar' )
 			);
-		}
-
-		// We need only one action scheduled
-		if ( ! as_next_scheduled_action( $hook, $args, $group ) ) {
+		} else {
+			// We need only one action scheduled
+			as_unschedule_action( $hook, $args, $group );
 			as_schedule_single_action( time(), $hook, $args, $group );
 
 			wc_get_logger()->info(
