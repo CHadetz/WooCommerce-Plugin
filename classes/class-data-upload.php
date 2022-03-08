@@ -29,7 +29,7 @@ class Data_Upload {
 		$api_token      = \WC_Admin_Settings::get_option( 'custobar_api_setting_token', false );
 		$company_domain = \WC_Admin_Settings::get_option( 'custobar_api_setting_company', false );
 		//$url            = sprintf( 'https://%s.custobar.com/api', $company_domain ) . $endpoint;
-		$url = $company_domain;
+		$url = $company_domain . $endpoint;
 
 		$response = wp_remote_request(
 			$url,
@@ -280,7 +280,7 @@ class Data_Upload {
 	public static function api_test() {
 		$api_token      = \WC_Admin_Settings::get_option( 'custobar_api_setting_token', false );
 		$company_domain = \WC_Admin_Settings::get_option( 'custobar_api_setting_company', false );
-		$url            = sprintf( 'https://%s.custobar.com/api', $company_domain ) . '/data/customers/';
+		$url            = $company_domain . '/data/customers/';
 
 		$response = wp_remote_request(
 			$url,

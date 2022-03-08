@@ -14,7 +14,7 @@ use WooCommerceCustobar\DataType\Custobar_Product;
 class Product_Sync extends Data_Sync {
 
 
-	protected static $endpoint = '/products/';
+	protected static $endpoint = '/products/upload/';
 	protected static $child    = __CLASS__;
 
 	public static function add_hooks() {

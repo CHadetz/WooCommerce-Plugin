@@ -15,7 +15,7 @@ use WooCommerceCustobar\DataType\Utilities;
 class Sale_Sync extends Data_Sync {
 
 
-	protected static $endpoint = '/sales/';
+	protected static $endpoint = '/sales/upload/';
 	protected static $child    = __CLASS__;
 
 	public static function add_hooks() {

@@ -14,7 +14,7 @@ use WooCommerceCustobar\DataType\Custobar_Customer;
 class Customer_Sync extends Data_Sync {
 
 
-	protected static $endpoint  = '/customers/';
+	protected static $endpoint  = '/customers/upload/';
 	protected static $child     = __CLASS__;
 	protected static $data_type = 'customer';
 

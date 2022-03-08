@@ -105,13 +105,13 @@ class WC_Settings_Custobar extends WC_Settings_Page {
 			'custobar_api_token'             => array(
 				'name' => __( 'API Token', 'woocommerce-custobar' ),
 				'type' => 'password',
-				'desc' => __( 'Enter your Custobar API token.', 'woocommerce-custobar' ),
+				'desc' => __( 'Enter your API token.', 'woocommerce-custobar' ),
 				'id'   => 'custobar_api_setting_token',
 			),
 			'custobar_api_company'           => array(
-				'name' => __( 'Company Domain', 'woocommerce-custobar' ),
+				'name' => __( 'API url', 'woocommerce-custobar' ),
 				'type' => 'text',
-				'desc' => __( 'Enter the unique domain prefix for your Custobar account, for example if your Custobar account is at acme123.custobar.com then enter only acme123.', 'woocommerce-custobar' ),
+				'desc' => __( 'Enter the full API url, eg. "https://COMPANY.custobar.com/api" ', 'woocommerce-custobar' ),
 				'id'   => 'custobar_api_setting_company',
 			),
 			'custobar_rest_api_secret'       => array(
