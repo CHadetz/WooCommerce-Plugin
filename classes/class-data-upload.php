@@ -25,11 +25,20 @@ class Data_Upload {
 	 */
 	public static function upload_custobar_data( $endpoint, $data ) {
 
-		$body           = wp_json_encode( $data );
-		$api_token      = \WC_Admin_Settings::get_option( 'custobar_api_setting_token', false );
-		$company_domain = \WC_Admin_Settings::get_option( 'custobar_api_setting_company', false );
-		//$url            = sprintf( 'https://%s.custobar.com/api', $company_domain ) . $endpoint;
-		$url = $company_domain . $endpoint;
+		// Check if API url overridden
+		$custom_api_url   = \WC_Admin_Settings::get_option( 'custobar_custom_api_url', false );
+		$custom_api_token = \WC_Admin_Settings::get_option( 'custobar_custom_api_token', false );
+
+		if ( $custom_api_url && $custom_api_token ) {
+			$url       = $custom_api_url . $endpoint;
+			$api_token = $custom_api_token;
+		} else {
+			$api_token      = \WC_Admin_Settings::get_option( 'custobar_api_setting_token', false );
+			$company_domain = \WC_Admin_Settings::get_option( 'custobar_api_setting_company', false );
+			$url            = sprintf( 'https://%s.custobar.com/api', $company_domain ) . $endpoint;
+		}
+
+		$body = wp_json_encode( $data );
 
 		$response = wp_remote_request(
 			$url,
@@ -280,7 +289,7 @@ class Data_Upload {
 	public static function api_test() {
 		$api_token      = \WC_Admin_Settings::get_option( 'custobar_api_setting_token', false );
 		$company_domain = \WC_Admin_Settings::get_option( 'custobar_api_setting_company', false );
-		$url            = $company_domain . '/data/customers/';
+		$url            = sprintf( 'https://%s.custobar.com/api', $company_domain ) . '/data/customers/';
 
 		$response = wp_remote_request(
 			$url,
